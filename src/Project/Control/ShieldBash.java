@@ -37,16 +37,20 @@ public class ShieldBash implements Action {
             throw new IllegalStateException("ON_COOLDOWN");
         }
 
-        Enemy target = chooseTarget(targets);
+        Enemy target;
+        if (targets.size() == 1) {
+            target = targets.get(0);
+        } else {
+            target = chooseTarget(targets);
+        }
         if (target == null) return;
 
-        // Deal BasicAttack damage
         int damage = Math.max(0, user.getAttack() - target.getDefense());
         int originalHp = target.getCurrentHp();
         if (!target.isInvulnerable()) {
             target.setCurrentHp(target.getCurrentHp() - damage);
         }
-        System.out.println(user.getName() + " uses Shield Bash on " + target.getName() + " for " + damage + " damage!" + " (HP: " + originalHp + " -> " + target.getCurrentHp() + ")");
+        System.out.println(user.getName() + " uses Shield Bash on " + target.getName() + " for " + damage + " damage!" + " (HP: " + originalHp + " → " + target.getCurrentHp() + ")");
 
         StunEffect stun = new StunEffect();
         stun.applyStatus(user, target, 2);
